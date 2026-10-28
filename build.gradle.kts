@@ -7,4 +7,7 @@ plugins {
     alias(libs.plugins.android.lint) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.compose.multiplatform) apply false
+
+    id("com.google.dagger.hilt.android") version "2.60.1" apply false //Modul 4 dari AI
+    id("com.google.devtools.ksp") version "2.3.12" apply false //Modul 4 dari AI
 }

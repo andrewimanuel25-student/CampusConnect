@@ -1,6 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+
+    //id("com.android.application") //Modul 4 dari AI
+    //id("org.jetbrains.kotlin.android") //Modul 4 dari AI
+    id("com.google.dagger.hilt.android") //Modul 4 dari AI
+    id("com.google.devtools.ksp") //Modul 4 dari AI
 }
 
 android {
@@ -56,4 +61,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation("com.google.dagger:hilt-android:2.60.1") //Modul 4 dari AI
+    ksp("com.google.dagger:hilt-compiler:2.60.1") //Modul 4 dari AI
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0") //Modul 4 dari AI
 }
