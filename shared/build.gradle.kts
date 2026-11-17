@@ -9,7 +9,7 @@ kotlin {
         namespace = "com.kharismastudio.shared"
         compileSdk = 35
         minSdk = 29
-        
+
         // Enable the androidDeviceTest source set
         withDeviceTest {
         }
