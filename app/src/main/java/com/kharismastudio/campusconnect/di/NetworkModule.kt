@@ -1,7 +1,9 @@
 package com.kharismastudio.campusconnect.di
 
+import com.kharisma.campusconnect.data.local.AnnouncementDao
+import com.kharisma.campusconnect.data.repository.AnnouncementRepository
 import com.kharismastudio.campusconnect.data.remote.AnnouncementApi
-import com.kharismastudio.campusconnect.data.repository.AnnouncementRepository
+//import com.kharismastudio.campusconnect.data.repository.AnnouncementRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,9 +64,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideAnnouncementRepository(
-        api: AnnouncementApi
+        api: AnnouncementApi,
+        dao: AnnouncementDao
     ): AnnouncementRepository {
-        return AnnouncementRepository(api)
+        return AnnouncementRepository(api, dao)
 
     }
     @Provides

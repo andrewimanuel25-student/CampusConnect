@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.kharismastudio.campusconnect.presentation.AnnouncementScreen
 import com.kharismastudio.campusconnect.presentation.AppNavigation
-import com.kharismastudio.campusconnect.presentation.HomeScreen
 import com.kharismastudio.campusconnect.ui.theme.CampusConnectTheme
 import dagger.hilt.android.AndroidEntryPoint
 
