@@ -25,7 +25,7 @@ kotlin {
             }
         }
 
-        // For com.android.kotlin.multiplatform.library, the instrumented test source set is 'androidDeviceTest'
+        // In com.android.kotlin.multiplatform.library, instrumented tests use 'androidDeviceTest'
         val androidDeviceTest by getting {
             dependencies {
                 implementation(libs.androidx.runner)
@@ -33,8 +33,8 @@ kotlin {
                 implementation(libs.androidx.junit)
             }
         }
-        
-        // The unit test source set is 'androidHostTest'
+
+        // Unit tests use 'androidHostTest'
         val androidHostTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
