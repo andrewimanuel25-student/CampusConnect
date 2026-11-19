@@ -25,19 +25,12 @@ kotlin {
             }
         }
 
-        // In com.android.kotlin.multiplatform.library, instrumented tests use 'androidDeviceTest'
+        // Use 'androidDeviceTest' for instrumented tests in the KMP Android library plugin
         val androidDeviceTest by getting {
             dependencies {
                 implementation(libs.androidx.runner)
                 implementation(libs.androidx.core)
                 implementation(libs.androidx.junit)
-            }
-        }
-
-        // Unit tests use 'androidHostTest'
-        val androidHostTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
             }
         }
     }
