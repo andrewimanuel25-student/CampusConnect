@@ -8,6 +8,14 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@Provides
+@Singleton
+fun provideInfoMitraRepository(
+    apolloClient: ApolloClient
+): InfoMitraRepository {
+    return InfoMitraRepository(apolloClient)
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object ApolloModule {
@@ -18,13 +26,5 @@ object ApolloModule {
         return ApolloClient.Builder()
             .serverUrl("https://trevorblades.com")
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideInfoMitraRepository(
-        apolloClient: ApolloClient
-    ): InfoMitraRepository {
-        return InfoMitraRepository(apolloClient)
     }
 }

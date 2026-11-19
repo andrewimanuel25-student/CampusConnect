@@ -1,21 +1,34 @@
 package com.kharismastudio.campusconnect.di
 
-import com.kharisma.campusconnect.data.local.AnnouncementDao
-import com.kharisma.campusconnect.data.repository.AnnouncementRepository
+//import com.kharismastudio.campusconnect.data.local.AnnouncementDao
+//import com.kharisma.campusconnect.data.repository.AnnouncementRepository
+//import com.kharismastudio.campusconnect.data.remote.AnnouncementApi
+////import com.kharismastudio.campusconnect.data.repository.AnnouncementRepository
+//import dagger.Module
+//import dagger.Provides
+//import dagger.hilt.InstallIn
+//import dagger.hilt.components.SingletonComponent
+//
+//import okhttp3.OkHttpClient
+//import okhttp3.logging.HttpLoggingInterceptor
+//import retrofit2.Retrofit
+//import retrofit2.converter.gson.GsonConverterFactory
+//import javax.inject.Singleton
+//
+//import com.kharismastudio.campusconnect.data.NotificationSocketManager
+
 import com.kharismastudio.campusconnect.data.remote.AnnouncementApi
-//import com.kharismastudio.campusconnect.data.repository.AnnouncementRepository
+import com.kharismastudio.campusconnect.data.repository.AnnouncementRepository
+//import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-
-import com.kharismastudio.campusconnect.data.NotificationSocketManager
 
 
 @Module
@@ -28,6 +41,7 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BASIC
         }
     }
+
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -37,6 +51,7 @@ object NetworkModule {
             .addInterceptor(loggingInterceptor)
             .build()
     }
+
     @Provides
     @Singleton
     fun provideRetrofit(
@@ -65,14 +80,8 @@ object NetworkModule {
     @Singleton
     fun provideAnnouncementRepository(
         api: AnnouncementApi,
-        dao: AnnouncementDao
     ): AnnouncementRepository {
-        return AnnouncementRepository(api, dao)
+        return AnnouncementRepository(api)
 
-    }
-    @Provides
-    @Singleton
-    fun provideNotificationSocketManager(): NotificationSocketManager {
-        return NotificationSocketManager()
     }
 }

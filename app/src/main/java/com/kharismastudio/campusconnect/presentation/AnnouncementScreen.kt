@@ -1,9 +1,18 @@
-package com.kharisma.campusconnect.presentation
+package com.kharismastudio.campusconnect.presentation
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,104 +21,111 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kharismastudio.campusconnect.data.repository.AnnouncementRepository
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
-@Composable
-fun AnnouncementScreen(
+@Composable fun AnnouncementScreen(
     viewModel: AnnouncementViewModel = hiltViewModel()
 ) {
-    val announcements by viewModel.announcements.collectAsState()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
-    val refreshError by viewModel.refreshError.collectAsState()
+    val state by viewModel.uiState.collectAsState() //Modul 5
+    val announcements by viewModel.announcements.collectAsState() //MODUL 6
+    val isRefreshing by viewModel.isRefreshing.collectAsState() //MODUL 6
+    val refreshError by viewModel.refreshError.collectAsState() //MODUL 6
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Header dan Tombol Refresh
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Pengumuman Kampus",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Button(
-                onClick = { viewModel.refreshAnnouncements() },
-                enabled = !isRefreshing
-            ) {
-                Text("Refresh")
-            }
+    if (isRefreshing) { CircularProgressIndicator() } //MODUL 6
+
+    refreshError?.let { message ->
+        Text(
+            text = message,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+
+    if (announcements.isEmpty()) {
+        Text("Belum ada pengumuman tersimpan.")
+    } else {
+        LazyColumn {
+//            items(announcements) {item ->
+//                // Gunakan kembali komponen kartu pengumuman
+//                // yang telah dibuat pada Pertemuan 5.
+//            }
         }
+    }
 
-        Spacer(modifier = Modifier.height(8.dp))
+                when (val currentState = state) {
+                    is AnnouncementUiState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
 
-        // Indikator Loading saat refresh berlangsung
-        if (isRefreshing) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+                    is AnnouncementUiState.Success -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(
+                                items = currentState.data,
+                                key = { it.id }
+                            ) {
+                                    announcement -> Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = 12.dp,
+                                        vertical = 6.dp
+                                    )
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(16.dp)
+                                ) {
+                                    Text(
+                                        text = announcement.judul,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = announcement.isi,
+                                        modifier = Modifier.padding(top = 8.dp),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                            }
+                            }
+                        }
+                    }
 
-        // Banner Error jika gagal konek server (data cache tetap aman di bawah)
-        refreshError?.let { message ->
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
-            ) {
-                Text(
-                    text = message,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
-                    modifier = Modifier.padding(12.dp),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-        }
-
-        // Daftar Pengumuman dari Room
-        if (announcements.isEmpty() && !isRefreshing) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Belum ada pengumuman tersimpan.")
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(
-                    items = announcements,
-                    key = { it.id }
-                ) { announcement ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp)
-                    ) {
+                    is AnnouncementUiState.Error -> {
                         Column(
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(24.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = announcement.judul,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                text = currentState.message
                             )
-                            Text(
-                                text = announcement.isi,
-                                modifier = Modifier.padding(top = 8.dp),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+
+                            Button(
+                                onClick = { viewModel.muatUlang() },
+                                modifier = Modifier.padding(top = 16.dp)
+                            ) {
+                                Text("Coba Lagi")
+                            }
+
+                            Button(
+                                onClick = { viewModel.refreshAnnouncements()
+                                }
+                            ) {
+                                Text("Refresh")
+                            }
                         }
                     }
                 }
             }
         }
-    }
-}
+        }

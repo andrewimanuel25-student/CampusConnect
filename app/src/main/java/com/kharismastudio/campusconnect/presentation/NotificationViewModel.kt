@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kharismastudio.campusconnect.data.NotificationSocketManager
 import com.kharismastudio.campusconnect.data.SocketStatus
+import dagger.Provides
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Singleton
+
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
@@ -53,4 +56,10 @@ class NotificationViewModel @Inject constructor(
         socketManager.disconnect()
         super.onCleared()
     }
+}
+
+@Provides
+@Singleton
+fun provideNotificationSocketManager(): NotificationSocketManager {
+    return NotificationSocketManager()
 }

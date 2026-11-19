@@ -1,4 +1,4 @@
-package com.kharisma.campusconnect.data.remote
+package com.kharismastudio.campusconnect.data.remote
 
 data class AnnouncementDto(
     val userId: Int,

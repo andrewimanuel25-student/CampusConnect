@@ -1,9 +1,9 @@
-package com.kharisma.campusconnect.di
+package com.kharismastudio.campusconnect.di
 
 import android.content.Context
 import androidx.room.Room
-import com.kharisma.campusconnect.data.local.AnnouncementDao
-import com.kharisma.campusconnect.data.local.AppDatabase
+import com.kharismastudio.campusconnect.data.local.AnnouncementDao
+import com.kharismastudio.campusconnect.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
